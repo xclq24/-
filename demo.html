@@ -1,0 +1,184 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<style>
+			body{
+				width:654px;
+				margin:0 auto;
+				display: flex;
+		    flex-wrap: wrap;
+		    justify-content: space-between;
+		    align-content: start;
+			}
+			
+			.title{
+				font-family:"STXingkai";
+				font-size:60px;
+				text-align:center;
+				margin:10px auto;
+				width:100%;
+			}
+			
+			.label{
+				text-aligh:vertical;
+			}
+			
+			.result{
+				display:inline-block;
+				border:2px red solid;
+				height:200px;
+				width:425px;
+				text-align:center;
+				margin-top:10px;
+				font-family:"STXingkai";
+			}
+			
+			.result-list{
+				display:inline-block;
+				border:2px red solid;
+				width: 150px;
+		    height: 200px;
+				margin:10px 0 0 0;
+		    overflow: auto;
+			}
+
+			.large{
+				line-height:200px;
+				font-size:100px;
+			}
+			
+			.vip{
+				color:#ffaa00;
+			}
+			
+			.slogan{
+				font-family: "STXingkai";
+    		font-size: 30px;
+				margin:10px auto;
+			}
+			
+			.foot{
+				display: inline-block;
+		    width: inherit;
+		    text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<h1 class="title">天选之人</h1><br/>
+		<select id="class">
+			<option value=0>请选择班级</option>
+			<option value=6>高二6班</option>
+			<option value=7>高二7班</option>
+			<option value=8>高二8班</option>
+			<option value=9>高二9班</option>
+			<option value=12>高二12班</option>
+			<option value=13>高二13班</option>
+			<option value=14>高二14班</option>
+			<option value=15>高二15班</option>
+			<option value=16>高二16班</option>
+			<option value=17>高二17班</option>
+			<option value=0>其它(随机学号)</option>
+		</select>
+		共<label id="num" class="label">?</label>人
+		<input type="text" id="range" placeholder="请输入数字范围，默认100">
+		<button onclick="randomOne()">产生1个随机名额</button>
+		<button id="btnStart" onclick="start()">开始</button>
+		<button id="btnStop" onclick="stop()" disabled>停止</button>
+		<button onclick="clearList()">清空列表</button>
+		<br/>
+		<br/>
+		<lable class="result large" id="result"></lable>
+		<ol id="resultList" class="result-list"></ol>
+		<br/><br/>
+		<label class="foot slogan">谁才是天选之人？</label>
+		<br/>
+		<label class="foot">【适用于2018级】 Version 2019.8.29 By xczx-ctg</label>
+	</body>
+	
+	
+		<script>
+			var names = new Array(20);
+			names[6]=splitName("丁高豪,丁紫璇,王晓霞,王雪璐,王锦璇,方宇成,厉潘简绪,石昕怡,卢杜鑫,史程骅,吕杨,吕佳楠,吕道平,许顷播,严锴,李诗虹,吴天勤,吴骏杰,吴雅文,邹金桐,宋吕阳光,张卉,张宇宁,张瑜,张楠,张馨尹,陈宇恬,陈佳乐,周如意,周佳瑶,胡依丹,胡凌杰,俞子乐,俞珊珊,俞涵瑜,骆至诚,梅杨子玥,章可怡,章学礼,章鹏坤,梁宇昊,梁埔诚,梁钰诚,喻凯奇,温秦磊,蔡慧英,潘克宁,潘雅璐");
+			names[7]=splitName("丁吕昊,王楷润,石一权,石伟杰,石宇鑫,叶雨萌,申思艺,吕雍毅,李宇齐,李瑞,杨扬,杨锴李,吴宇坤,吴翼帆,张丹琪,张瑜荣,张煜森,陈宇涛,陈京京,陈俞,陈烨,陈琦玮,陈越祥,陈瑶珍,单栎蓉,孟昊,赵旭枫,胡云帆,胡洛楠,俞成,俞俊杰,骆杭凯,柴嘉骏,郭珂俣,盛智乐,章震荣,梁力元,梁天,梁芷琪,梁佳慧,梁嘉城,董文翰,董罗耀,甄大宁,潘文栋,潘宇钦,潘陈进,潘鼎,潘程亿,魏家乐");
+			names[8]=splitName("王佳琪,王钶熠,石乐天,石舒磊,石榴丹,卢昊男,叶珂妤,吕美樱子,吕健彬,朱健,朱玺奇,朱鑫杰,刘承余,孙展,李彦,何电,何宇康,张子晨,陈宇喆,郑宇航,郑锦康,赵立均,赵榆翰,赵微,俞华栋,俞凯威,俞柯帆,俞恩东,俞家钰,娄锦婷,顾佳懿,徐文韬,徐嘉怡,徐潇逸,黄晓婷,黄靓宇,章荣,章紫颖,章楚蓉,梁琪凯,梁惠和,梁慧婷,舒展,蔡豪天,潘璐");
+			names[9]=splitName("丁锦妃,王一帆,王义涵,王坚浩,王轶群,王骏驰,王越佳,王睿之,吕紫雯,吴铖昊,何心秀,何科冉,张力桓,张佳瑶,张炜,陈权权,陈锦楚,陈嘉伟,陈薇,周彬,赵可扬,胡颖岚,俞凯芸,俞晨奕,俞博文,俞嘉豪,袁晨钰,章敏鸣,梁驿,梁浩泽,梁梦璐,梁飘文,蔡一,蔡萌悦,蔡博雅,潘妤冰,潘金蓉,潘诗楠,潘培琪");
+			names[12]=splitName("丁文捷,丁加宁,丁倩颖,丁晨烨,王雨婷,王凯洁,王政耀,王玺,王彬丞,王嘉楠,石子怡,石欣宁,石思语,吕俏瑾,刘天宸,刘倩,李毕加,李雨文,杨晗露,余思楠,张旭锋,张显,张俊杰,张璞,张鑫怡,陈欣,陈柯而,陈钰,房小丽,赵一舟,施秋文,钱华颖,黄春莹,黄舒婷,盛灵敏,章晋宜,章晓兰,章雯丽,梁佳秀,梁楠希,傅奕雯,谢丰泽,潘江婷");
+			names[13]=splitName("丁李斌,丁英杰,丁歆妮,王子轩,王贝贝,王可儿,王可蓥,王欣怡,王楠希,王锦楠,邓越,石丹妮,卢媛,兰启睿,吕一权,吕梦倩,吕婕,吕越枫,朱佳甜,杨赟祎,吴杭铠,吴楷瑞,吴嘉棋,张彤旭,张泽南,张艳,张钶萌,张馨怡,陈子睿,陈伟豪,陈琳,周诗仪,周楚苑,赵浙颖,赵紫吉,俞琦,徐锴,高予涵,高欣,高攀,黄佳培,梁竣皓,蔡琳");
+			names[14]=splitName("马泽锦,王崧任,王楠,邓芸,邓栩怡,石涵钰,卢甜甜,吕佳佳,吕焓怡,朱怡佳,刘杭洁,许珂蓥,许琳,吴盼盼,何卓杭,张冠卉,张馨,陈钶宇,陈梓妤,陈靖丹,金佳宜,周栋杰,庞鑫意,孟楠楠,赵栩彤,赵慧琴,俞昉怡,俞怡朵,徐敏楠,章新悦,章嘉丽,梁以恒,梁奕,梁甜,梁舒钥,梁蒙蒙,屠芳仪,葛书予,蔡依依,潘齐意,潘佳怡,潘佳熠,潘奕彤,潘颖");
+			names[15]=splitName("王宏,王亮焜,王奕心,王梦瑶,王晨奇,王楷镔,卢子昱,卢勋,叶昊霖,许雨涵,牟昊楠,李一辉,李骁,李航宇,李海嘉,杨于芮,邱伟康,陈子健,陈廷瑜,陈昊,项一乘,赵粒诚,黄晨航,章越,章棋岚,梁一东,梁辛,梁佳钰,蔡子彬,蔡宇鸣,潘沈子涵,潘斌峰");
+			names[16]=splitName("王佳丽,王瑞,王意杉,王璐瑶,石贇,卢乐瑶,叶德鑫,许阳,李欣仪,李虹蓁,吴逍逸,何涵甲,张益,陈彬,陈斯骐,林琛卜,竺悦,郑宇贝,郑策,胡桐舒,袁子轩,陶鹏峰,盛越,章晗,葛瑶,蒋任翔,蔡其宏,潘子琼");
+			names[17]=splitName("王易,王欣怡,王梓伶,王霖,邓以琳,石文煜,吕丹钰,吕煜航,吕瞳,朱冠球,刘鑫栋,孙未,李于思,吴锦扬,何诗语,应子榆,汪翰军,沈阳,张佳怡,张佳楠,陈沛然,陈星宇,陈夏逸,陈彬钥,范逸骋,林点依,金至立,金宇杰,金逸晴,周家立,俞远程,俞嘉树,姜楠,顾晋,柴梦涵,郭馨怡,陶宣舟,黄之钰,黄薇凝,章芝煜,章存远,章奕涵,章哲怡,梁爽,梁简,谢雨恬,蔡金羽,潘剑桥");
+
+			var selectObj=document.getElementById("class");
+			var timer;
+			function start(){
+				if(!timer){
+					timer=setInterval(create,80);
+				}
+				
+				document.getElementById("btnStop").disabled=false;
+				document.getElementById("btnStart").disabled=true;
+			}
+			function stop(){
+				clearInterval(timer);
+				timer=null;
+				
+				document.getElementById("btnStop").disabled=true;
+				document.getElementById("btnStart").disabled=false;
+				addItem();
+			}
+			
+			function randomOne(){
+				create();
+				addItem();
+			}
+
+			function create(){
+				var index=selectObj.selectedIndex;
+				var classValue=parseInt(selectObj.options[index].value);
+				var ans;
+				
+				if(classValue>0){
+					var num=names[classValue].length;
+					document.getElementById("num").innerHTML=num;
+					var rnd=Math.ceil(Math.random()*num);
+					ans=names[classValue][rnd-1];
+				}else{
+					var num=document.getElementById("range").value;
+					if(num==0){
+						num=100;
+					}
+					ans=Math.ceil(Math.random()*num).toString();
+				}
+				
+				//特殊名字显示橙色
+				if(ans.charAt(0)=='k'){
+					document.getElementById("result").setAttribute("class","result large vip");
+					ans=ans.substring(1,ans.length);
+				}else{
+					document.getElementById("result").setAttribute("class","result large");
+				}
+				
+				document.getElementById("result").innerHTML=ans;
+			}
+			
+			function splitName(nameStr){
+				return nameStr.split(",");
+			}
+			
+			function addItem(){
+				var content=document.getElementById("result").innerHTML;
+				var newLi=document.createElement("li");
+				newLi.appendChild(document.createTextNode(content));
+				var list=document.getElementById("resultList");
+				list.appendChild(newLi);
+			}
+			
+			function clearList(){
+				document.getElementById("resultList").innerHTML=null;
+			}
+		</script>
+<html>
+	
+
